@@ -14,8 +14,8 @@ For details about SAM fine-tuning with LoRA-Adapters, see [Mathieu's repository]
 - **Configurable workflows**: Define workflows via YAML  
 
 <p float="left">
-<img src="./docs/images/from.png" width=600 height=400>
-<img src="./docs/images/to.png" width=600 height=400>
+<img src="./docs/images/from.png" width=300 height=200>
+<img src="./docs/images/to.png" width=300 height=200>
 </p>
 ---
 
