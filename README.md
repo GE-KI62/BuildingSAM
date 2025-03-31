@@ -13,9 +13,10 @@ For details about SAM fine-tuning with LoRA-Adapters, see [Mathieu's repository]
 - **Test-Time Augmentation (TTA)**: 3 geometric augmentations for inference
 - **Configurable workflows**: Define workflows via YAML  
 
+<p float="left">
 <img src="./docs/images/from.png" width=600 height=400>
 <img src="./docs/images/to.png" width=600 height=400>
-
+</p>
 ---
 
 ## 📥 Installation
@@ -29,7 +30,10 @@ wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth
 Place the downloaded weights in a directory. 
 Note that these weights are licensed by Meta AI under the Apache 2.0 License
 
-
+Download the LoRA-adapter checkpoint file if you want to detect buildings in 3-channel aerial imagery from [here](https://geodata.gelsenkirchen.de/medien/_Dokumente/buildingSAM/buildingSAM_R512.safetensors) or execute the following command in your terminal:
+```
+wget https://geodata.gelsenkirchen.de/medien/_Dokumente/buildingSAM/buildingSAM_R512.safetensors
+```
 
 ### 2. Install Dependencies  
 You can install necessary modules via pip or conda. Conda is recommended.
