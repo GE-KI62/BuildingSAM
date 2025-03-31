@@ -1,0 +1,68 @@
+image_format: ".tif"                                                          # image format for all subprocesses
+
+preprocessor:
+  buffer_size: 512                                                            # buffer size in pixels
+  step_size: 256                                                              # step size for tiling in x- and y-direction
+  resample_size: 0.5                                                          # pixel size in image units after resampling
+  image_dir: ...                                                              # image directory for preprocessing 
+  target_dir: ...                                                             # target directory for preprocessing.
+  output_dir: ...                                                             # output directory
+
+model:
+  rank: 512                                                                   # LoRA adaptor rank
+  device: cuda                                                                # device for model and data. if device: cuda and torch.cuda.is_available() then GPU is used for training/inference
+  model_dir: ...                                                              # output directory for model checkpoints
+  load_pth_from: ".../sam_vit_b_01ec64.pth"                                   # pth load path for loading foundation SAM model weights
+  load_checkpoint_from: "./pretrained/gesam_building_detection.safetensors"   # checkpoint path to load adapter weights from
+  
+training:
+    batch_size: 2
+    num_epochs: 100
+    learning_rate: 0.0001
+    save_model_each_n_epoch: 1                                                # checkpoint frequency
+    tensorboard_log_dir: ...                                                  # output directory for tensorboard logs
+    augmentations:
+        - name: RandomSizedCrop
+          min_max_height: [1024, 5000]
+          size: [1024, 1024]
+          p: 1.0
+        - name: HorizontalFlip
+          p: 0.25
+        - name: VerticalFlip
+          p: 0.25
+        - name: RandomRotate90
+          p: 0.5
+        - name: Transpose
+          p: 0.25
+        - name: RandomBrightnessContrast
+          p: 0.5
+        - name: CoarseDropout
+          num_holes_range: [5, 10]
+          hole_height_range: [32, 64]
+          hole_width_range: [32, 64]
+          p: 1.0
+    trainDataset:
+      image_dir: ... 
+      target_dir: ... 
+    valDataset:
+      image_dir: ...
+      target_dir: ...
+      visualization:
+          output_type: probs
+          output_dir: ...
+          frequency: 2
+
+inference:
+    output_type: probs 
+    image_dir: ...
+    output_dir: ... 
+    augmentations:                                                            # test time augmentation
+        - HorizontalFlip
+        - VerticalFlip
+        - RandomRotate90
+
+postprocessor:
+  output_type: probs
+  threshold: 0                                                                # threshold value. Only used when output_type=masks
+  image_dir: ...
+  output_dir: ...
