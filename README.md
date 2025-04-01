@@ -17,7 +17,7 @@ For details about SAM fine-tuning with LoRA-Adapters, see [Mathieu's repository]
 <img src="./docs/images/from.png" width=400 height=250>
 <img src="./docs/images/to.png" width=400 height=250>
 </p>
----
+
 
 ## 📥 Installation
 
