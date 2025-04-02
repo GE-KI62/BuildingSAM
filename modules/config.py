@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ValidationError, model_validator, ConfigDict, field_validator, Field, DirectoryPath, FilePath, confloat, validator
+from pydantic import BaseModel, ValidationError, model_validator, ConfigDict, field_validator, Field, DirectoryPath, FilePath, confloat, validator, computed_field
 from enum import Enum
 from typing import Optional, Literal, Union, Annotated
 import yaml

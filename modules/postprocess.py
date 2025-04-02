@@ -15,17 +15,18 @@ class AverageMerger:
 	
 	def merge(self, merged_data, new_data, merged_mask, new_mask, coff, roff, **kwargs):
 		valid_pixels = ~new_mask
-		rows, cols = np.where(valid_pixels.squeeze())
-		rmin, rmax = roff + rows.min(), roff + rows.max() + 1
-		cmin, cmax = coff + cols.min(), coff + cols.max() + 1
+		if np.any(valid_pixels):
+			rows, cols = np.where(valid_pixels.squeeze())
+			rmin, rmax = roff + rows.min(), roff + rows.max() + 1
+			cmin, cmax = coff + cols.min(), coff + cols.max() + 1
 
-		self.sum[rmin:rmax, cmin:cmax] += new_data.squeeze()[rows.min():rows.max() + 1, cols.min():cols.max() + 1] 
-		self.count[rmin:rmax, cmin:cmax] += 1
+			self.sum[rmin:rmax, cmin:cmax] += new_data.squeeze()[rows.min():rows.max() + 1, cols.min():cols.max() + 1] 
+			self.count[rmin:rmax, cmin:cmax] += 1
 
 class Postprocessor:
-	def __init__(self, input_dir: str, image_format: str):
+	def __init__(self, input_dir: str, image_format: str = ".tif"):
 		self.input_dir = Path(input_dir)
-		self.image_format = image_format
+		self.image_format = "." + image_format.lstrip().lower()
 
 	def create_alpha_sources(self, img_paths):
 		mem_files = []
@@ -93,8 +94,8 @@ class Postprocessor:
 					merger.sum / merger.count,
 					np.nan
 				)
+
 			profile.update({
-					"driver": "GTiff",
 					"width": mosaic.shape[2],
 					"height": mosaic.shape[1],
 					"transform": transform,

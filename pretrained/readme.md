@@ -1,0 +1,1 @@
+You may put the .safentensor and .pth file here

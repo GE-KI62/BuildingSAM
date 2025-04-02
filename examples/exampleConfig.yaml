@@ -7,21 +7,22 @@ preprocessor:
   image_dir: ...                                                              # image directory for preprocessing 
   target_dir: ...                                                             # target directory for preprocessing.
   output_dir: ...                                                             # output directory
+  keep_empty: false                                                           # by default, empty images are discarded
 
 model:
   rank: 512                                                                   # LoRA adaptor rank
   device: cuda                                                                # device for model and data. if device: cuda and torch.cuda.is_available() then GPU is used for training/inference
-  model_dir: ...                                                              # output directory for model checkpoints
-  load_pth_from: ".../sam_vit_b_01ec64.pth"                                   # pth load path for loading foundation SAM model weights
-  load_checkpoint_from: "./pretrained/gesam_building_detection.safetensors"   # checkpoint path to load adapter weights from
+  load_pth_from: "./pretrained/sam_vit_b_01ec64.pth"                          # pth load path for loading foundation SAM model weights
+  load_checkpoint_from: "./pretrained/buildingSAM_R512.safetensors"           # checkpoint path to load adapter weights from
   
 training:
+    model_dir: ...                                                            # output directory for model checkpoints
     batch_size: 2
     num_epochs: 100
     learning_rate: 0.0001
     save_model_each_n_epoch: 1                                                # checkpoint frequency
     tensorboard_log_dir: ...                                                  # output directory for tensorboard logs
-    augmentations:
+    augmentations:                                                            # list of train time augmentations (see albumentations.ai for more information)
         - name: RandomSizedCrop
           min_max_height: [1024, 5000]
           size: [1024, 1024]
@@ -47,10 +48,10 @@ training:
     valDataset:
       image_dir: ...
       target_dir: ...
-      visualization:
-          output_type: probs
-          output_dir: ...
-          frequency: 2
+    visualization:                                                            # write intermediate results during training to disk
+        output_type: probs
+        output_dir: ...
+        frequency: 2
 
 inference:
     output_type: probs 

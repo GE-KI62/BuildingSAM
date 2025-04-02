@@ -14,13 +14,6 @@ DTYPE = {
 	rio.uint32: 2**32 - 1
 }
 
-DRIVERS = {
-	".png" : "PNG",
-	".tif" : "GTiff",
-	".tiff" : "GTiff",
-	".jpg": "JPEG",
-	".jpeg": "JPEG"
-}
 
 def join_make(*args):
 	path = os.path.join(*args)
@@ -45,15 +38,17 @@ def get_tiles(meta, transform, width=256, height=256, step_size=256):
 		win_transform = windows.transform(window, transform)
 		yield window, win_transform
 
+
+
 class Preprocessor:
-	def __init__(self, buffer_size=0, step_size=1024, resample_size=0.3, keep_empty=False, image_format="tif"):
+	def __init__(self, buffer_size=0, step_size=1024, resample_size=0.3, keep_empty=False, image_format=".tif"):
 		self.buffer_size = buffer_size
 		self.dest_width = 1024
 		self.dest_height = 1024 
 		self.step_size = step_size
 		self.resample_size = resample_size
 		self.keep_empty = keep_empty
-		self.image_format = image_format
+		self.image_format = "." + image_format.lstrip(".").lower()
 
 	def _buffer_image(self, file):
 		meta = file.meta.copy()
@@ -107,9 +102,9 @@ class Preprocessor:
 		meta.update({
 			"width": width,
 			"height": height,
-			"transform": new_transform,
-			"driver": DRIVERS[Path(file.name).suffix]
+			"transform": new_transform
 		})
+
 		return img, mask, meta, Path(file.name).stem
 
 
@@ -123,7 +118,7 @@ class Preprocessor:
 				"height" : window.height,
 				"transform": win_transform,
 				"dtype" : rio.uint8,
-				"compress": "LZW",
+				"compress": "LZW"
 			})
 
 			tile = np.zeros((image.shape[0], window.height, window.width), dtype=np.uint8)
@@ -172,7 +167,7 @@ def process(config):
 	img_paths = glob.glob(search_folder)
 	print(f"Found {len(img_paths)} image(s) for preprocessing...")
 
-	processor = Preprocessor(config.buffer_size, config.step_size, config.resample_size, config.keep_empty, config.image_format.strip("."))
+	processor = Preprocessor(config.buffer_size, config.step_size, config.resample_size, config.keep_empty, config.image_format)
 	processor(img_paths, config.output_dir, "images")
 
 	if config.target_dir:	
