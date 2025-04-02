@@ -13,9 +13,10 @@ For details about SAM fine-tuning with LoRA-Adapters, see [Mathieu's repository]
 - **Test-Time Augmentation (TTA)**: 3 geometric augmentations for inference
 - **Configurable workflows**: Define workflows via YAML  
 
+
 <p float="left">
-<img src="./docs/images/from.png" width=600 height=400>
-<img src="./docs/images/to.png" width=600 height=400>
+<img src="./docs/images/from.png" width=350 height=250>
+<img src="./docs/images/to.png" width=350 height=250>
 </p>
 ---
 
