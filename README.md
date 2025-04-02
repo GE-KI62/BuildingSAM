@@ -35,6 +35,7 @@ Download the LoRA-adapter checkpoint file if you want to detect buildings in 3-c
 ```
 wget https://geodata.gelsenkirchen.de/medien/_Dokumente/buildingSAM/buildingSAM_R512.safetensors
 ```
+You may put both files into the pretrained-folder. Otherwise you have to change both paths in the config file accordingly.
 
 ### 2. Install Dependencies  
 You can install necessary modules via pip or conda. Conda is recommended.
