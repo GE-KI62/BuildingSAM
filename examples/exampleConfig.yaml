@@ -1,9 +1,9 @@
 image_format: ".tif"                                                          # image format for all subprocesses
 
 preprocessor:
-  buffer_size: 512                                                            # buffer size in pixels
+  buffer_size: 0                                                              # buffer size in pixels
   step_size: 256                                                              # step size for tiling in x- and y-direction
-  resample_size: 0.5                                                          # pixel size in image units after resampling
+  resample_size: 0.3                                                          # pixel size in image units after resampling
   image_dir: ...                                                              # image directory for preprocessing 
   target_dir: ...                                                             # target directory for preprocessing.
   output_dir: ...                                                             # output directory
