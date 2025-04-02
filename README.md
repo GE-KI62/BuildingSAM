@@ -1,4 +1,4 @@
-# BuildingSAM: Building Detection Model and Pipeline for Aerial Imagery  
+# BuildingSAM: Building Detection Pipeline for Aerial Imagery  
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 **BuildingSAM** is a processing pipeline for 3-channel remote sensing data, paired with a pre-trained **Segment Anything Model (SAM) LoRA-Adapter** optimized for building detection in aerial imagery with a 10-50cm (30cm best) Ground Sampling Distance (GSD). The pipeline is fully configurable via a YAML file for reproducibility and ease of use.
@@ -14,10 +14,10 @@ For details about SAM fine-tuning with LoRA-Adapters, see [Mathieu's repository]
 - **Configurable workflows**: Define workflows via YAML  
 
 <p float="left">
-<img src="./docs/images/from.png" width=400 height=250>
-<img src="./docs/images/to.png" width=400 height=250>
+<img src="./docs/images/from.png" width=600 height=400>
+<img src="./docs/images/to.png" width=600 height=400>
 </p>
-
+---
 
 ## 📥 Installation
 
