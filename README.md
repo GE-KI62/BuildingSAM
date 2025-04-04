@@ -6,6 +6,8 @@
 
 For details about SAM fine-tuning with LoRA-Adapters, see [Mathieu's repository](https://github.com/MathieuNlp/Sam_LoRA/tree/main).
 
+This project should work for Python versions >=3.8, <3.13
+
 ## 🚀 Key Features
 
 - **End-to-end processing**: Preprocessing, training, inference, and postprocessing
