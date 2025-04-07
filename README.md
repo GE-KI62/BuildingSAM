@@ -6,7 +6,7 @@
 
 For details about SAM fine-tuning with LoRA-Adapters, see [Mathieu's repository](https://github.com/MathieuNlp/Sam_LoRA/tree/main).
 
-This project should work for Python versions >=3.8, <3.13
+Project should work for Python versions >=3.8, <3.13
 
 ## 🚀 Key Features
 
@@ -17,10 +17,10 @@ This project should work for Python versions >=3.8, <3.13
 - **Configurable workflows**: Define workflows via YAML
 
 <p float="left">
-<img src="./docs/images/from.png" width=300 height=250>
-<img src="./docs/images/to.png" width=300 height=250>
+<img src="./docs/images/from.png" width=400 height=300>
+<img src="./docs/images/to.png" width=400 height=300>
 </p>
----
+
 
 ## 📥 Installation
 
@@ -69,7 +69,7 @@ pip install -r requirements.txt
 conda install --yes --file requirements.txt
 ```
 
----
+If at any point you run in an error stating that c10.dll is missing, you'll need to install the Microsoft Visual C++ Redistributable manually.
 
 ## 🛠️ Usage
 
@@ -81,17 +81,17 @@ GE-SAM offers 4 different processing stages. Parameters for all stages are set i
 
 ### 0. Global
 
-`image_format` defines the file extension used for searching image files in input folders and writing files to disk.
+`image_extension` defines the file extension used for searching image files in input folders and writing files to disk.
 
 ```
-image_format: ".tif" # (optional; .tif by default)
+image_extension: .tif # (optional; .tif by default)
 ```
 
 ### 1. Preprocessing
 
-The preprocessing stage allows buffering, tiling and resampling images of a given `image_format` inside the specified `image_dir` and `target_dir`. `buffer_size` defines the width of the buffer in pixels around each input image (padded with 0s) and `step_size` the stepping size in pixels in x- and y-direction when tiling. `resample_size` lets you define the new size in image units of the preprocessed output (e.g. 0.3 → 30cm in EPSG 25832). By default, empty images are discarded and not written to disk. Set keep_empty accordingly.
+The preprocessing stage allows buffering, tiling and resampling images of a given `image_extension` inside the specified `image_dir` and `target_dir`. `buffer_size` defines the width of the buffer in pixels around each input image (padded with 0s) and `step_size` the stepping size in pixels in x- and y-direction when tiling. `resample_size` lets you define the new size in image units of the preprocessed output (e.g. 0.3 → 30cm in EPSG 25832). By default, empty images are discarded and not written to disk. Set keep_empty accordingly.
 
-If you want to prevent tiles from overlapping, you can set `step_size` equal to 1024 (SAM's native input size). If your input images are not resized to shape 1024x1024, SAM will do so automatically, which will lead to an increased processing time and generally worse results.
+If you want to prevent tiles from overlapping, you can set `step_size` equal to 1024 (SAM's native input size). If your input images are not resized to shape 1024x1024, SAM will do so automatically, which will lead to an increased processing time and generally worse results. It is advised to use preprocessed images for training and inference for best results.
 
 If you want to train a model and you are using the preprocessing stage for your training images, you'll also need to define a `target_dir` to preprocess your targets simultaneously OR run the preprocessor twice, each time with a different `image_dir`.
 
@@ -103,9 +103,9 @@ preprocessor:
   step_size: 256       # (optional: 1024 by default)
   resample_size: 0.5   # (optional: 0.3 by default)
   keep_empty: true     # (optional: False by default)
-  image_dir: "..."
-  target_dir: "..."    # (optional)
-  output_dir: "..."
+  image_dir: ...
+  target_dir: ...     # (optional)
+  output_dir: ...
 
 ```
 
@@ -118,6 +118,7 @@ python main.py preprocess --config-path myConfig.yaml
 ❗**Important**:
 
 - If you also want to process targets simultaneously, you have to declare a `target_dir`
+- Use the preprocessor to improve training and inference results
 
 ### 2. Model
 
@@ -137,7 +138,7 @@ model:
 
 ### 3. Training
 
-The training stage allows fine-tuning a LoRA-adapter to a specific use case (binary classification). Inside the configuration you can define hyperparameters for training (`batch_size`, `num_epochs` and `learning_rate`). If you want to output tensorboard logs, you can set a `tensorboard_log_dir`. `save_every_n_epochs` represents the frequency with which checkpoints are written to `model_dir`.
+The training stage allows fine-tuning a LoRA-adapter to a specific use case (binary classification). Inside the configuration you can define hyperparameters for training (`batch_size`, `num_epochs` and `learning_rate`). If you don't want to output tensorboard logs, you can comment `tensorboard_log_dir` out. `save_every_n_epochs` represents the frequency with which checkpoints are written to `model_dir`.
 
 To diversify your training data, GE-SAM offers 7 different training time augmentations. All augmentations have a p-value which describes the probability of an augmentation to be applied to a sample. `RandomSizedCrop` crops a part of the image with a random width and height in range `min_max_height` and then resamples it to a fixed `size`. `HorizontalFlip`, `VerticalFlip`, `RandomRotate90` and `Transpose` are simple geometric augmentations. `RandomBrightnessContrast` will change a sample's brightness and contrast. With `CoarseDropout` a random number of holes in range `num_holes_range` of a random width and height (`hole_height_range`, `hole_width_range`) can be stitched into the sample. Augmentations are optional and applied in the order they appear in the config. You can either remove all of them or only keep a subset.
 
@@ -262,13 +263,13 @@ Use pip or conda depending on your installation.
 **pip**
 
 ```
-pip uninstall -r requirements.txt
+pip uninstall -y -r requirements.txt
 ```
 
 **conda**
 
 ```
-conda remove --name env_name --all
+conda remove -y --name env_name --all
 ```
 
 ---
