@@ -50,13 +50,13 @@ def train(train_config, model_config):
 	processor = Samprocessor(model)
 
 
-	train_image_paths = glob.glob(os.path.join(train_config.train_dataset.image_dir, "*" + train_config.image_format))
-	train_target_paths = glob.glob(os.path.join(train_config.train_dataset.target_dir, "*" + train_config.image_format))
+	train_image_paths = glob.glob(os.path.join(train_config.train_dataset.image_dir, "*" + train_config.image_extension))
+	train_target_paths = glob.glob(os.path.join(train_config.train_dataset.target_dir, "*" + train_config.image_extension))
 	print(f"Found {len(train_image_paths)} (input) | {len(train_target_paths)} (target) | training images")
 
 	if train_config.val_dataset:
-		val_image_paths = glob.glob(os.path.join(train_config.val_dataset.image_dir, "*" + train_config.image_format))
-		val_target_paths = glob.glob(os.path.join(train_config.val_dataset.target_dir, "*" + train_config.image_format))
+		val_image_paths = glob.glob(os.path.join(train_config.val_dataset.image_dir, "*" + train_config.image_extension))
+		val_target_paths = glob.glob(os.path.join(train_config.val_dataset.target_dir, "*" + train_config.image_extension))
 		print(f"Found {len(val_image_paths)} (input) | {len(val_target_paths)} (target) | validation images")
 
 	train_ds = DatasetSegmentation(train_image_paths, train_target_paths, processor, transform=transform)

@@ -1,12 +1,13 @@
+#all declared paths are exemplary. Feel free to change them.
 image_format: ".tif"                                                          # image format for all subprocesses
 
 preprocessor:
   buffer_size: 0                                                              # buffer size in pixels
   step_size: 256                                                              # step size for tiling in x- and y-direction
   resample_size: 0.3                                                          # pixel size in image units after resampling
-  image_dir: ...                                                              # image directory for preprocessing 
-  target_dir: ...                                                             # target directory for preprocessing.
-  output_dir: ...                                                             # output directory
+  image_dir: ./data/input/images                                              # image directory for preprocessing 
+  #target_dir: ./data/input/targets                                           # target directory for preprocessing.
+  output_dir: ./data/output/preprocessed/train                                # output directory
   keep_empty: false                                                           # by default, empty images are discarded
 
 model:
@@ -16,12 +17,12 @@ model:
   load_checkpoint_from: "./pretrained/buildingSAM_R512.safetensors"           # checkpoint path to load adapter weights from
   
 training:
-    model_dir: ...                                                            # output directory for model checkpoints
+    model_dir: ./data/output/myFirstModel                                     # output directory for model checkpoints
     batch_size: 2
     num_epochs: 100
     learning_rate: 0.0001
     save_model_each_n_epoch: 1                                                # checkpoint frequency
-    tensorboard_log_dir: ...                                                  # output directory for tensorboard logs
+    #tensorboard_log_dir: ./data/output/logs                                  # output directory for tensorboard logs
     augmentations:                                                            # list of train time augmentations (see albumentations.ai for more information)
         - name: RandomSizedCrop
           min_max_height: [1024, 5000]
@@ -43,20 +44,20 @@ training:
           hole_width_range: [32, 64]
           p: 1.0
     trainDataset:
-      image_dir: ... 
-      target_dir: ... 
-    valDataset:
-      image_dir: ...
-      target_dir: ...
-    visualization:                                                            # write intermediate results during training to disk
-        output_type: probs
-        output_dir: ...
-        frequency: 2
+      image_dir: ./data/output/preprocessed/train/images
+      target_dir: ./data/output/preprocessed/train/targets
+    #valDataset:
+      #image_dir: ./data/output/preprocessed/val/images
+      #target_dir: ./data/output/preprocessed/val/targets
+    #visualization:                                                            # write intermediate results during training to disk
+        #output_type: probs
+        #output_dir: ./data/output/train/intermediates
+        #frequency: 2
 
 inference:
     output_type: probs 
-    image_dir: ...
-    output_dir: ... 
+    image_dir: ./data/output/preprocessed/train/images
+    output_dir: ./data/output/inference/
     augmentations:                                                            # test time augmentation
         - HorizontalFlip
         - VerticalFlip
@@ -65,5 +66,5 @@ inference:
 postprocessor:
   output_type: probs
   threshold: 0                                                                # threshold value. Only used when output_type=masks
-  image_dir: ...
-  output_dir: ...
+  image_dir: ./data/output/inference/
+  output_dir: ./data/output/postprocessed

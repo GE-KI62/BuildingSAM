@@ -38,7 +38,7 @@ def infer(inference_config, model_config):
 		transforms.extend([FN_MAPPING[x] for x in inference_config.augmentations])
 
 	
-	imgs = glob.glob(os.path.join(inference_config.image_dir, "*" + inference_config.image_format))
+	imgs = glob.glob(os.path.join(inference_config.image_dir, "*" + inference_config.image_extension))
 	print(f"Found {len(imgs)} images for processing in {inference_config.image_dir}...")
 	sam = build_sam_vit_b(checkpoint=model_config.load_pth_from)
 	sam_lora = LoRA_sam(sam, model_config.rank)

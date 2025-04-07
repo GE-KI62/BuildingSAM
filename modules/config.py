@@ -57,10 +57,10 @@ TrainAugmentation = Annotated[Union[
 ], Field(discriminator="name")]
 
 class ProtoConfig(BaseModel):
-    image_format: Optional[str] = ".tif"
+    image_extension: Optional[str] = ".tif"
 
-    @field_validator("image_format")
-    def validate_image_format(cls, v: str) -> str:
+    @field_validator("image_extension")
+    def validate_image_extension(cls, v: str) -> str:
         return "." + v.lstrip(".") if v else ".tif"
 
 class BaseConfig(ProtoConfig):
@@ -215,7 +215,7 @@ class Config(ProtoConfig):
     @model_validator(mode="after")
     def link_parent(self):
         def update_child(child: BaseConfig):
-            child.image_format = self.image_format
+            child.image_extension = self.image_extension
 
         if self.preprocessor:
             update_child(self.preprocessor)

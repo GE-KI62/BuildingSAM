@@ -41,14 +41,14 @@ def get_tiles(meta, transform, width=256, height=256, step_size=256):
 
 
 class Preprocessor:
-	def __init__(self, buffer_size=0, step_size=1024, resample_size=0.3, keep_empty=False, image_format=".tif"):
+	def __init__(self, buffer_size=0, step_size=1024, resample_size=0.3, keep_empty=False, image_extension=".tif"):
 		self.buffer_size = buffer_size
 		self.dest_width = 1024
 		self.dest_height = 1024 
 		self.step_size = step_size
 		self.resample_size = resample_size
 		self.keep_empty = keep_empty
-		self.image_format = "." + image_format.lstrip(".").lower()
+		self.image_extension = "." + image_extension.lstrip(".").lower()
 
 	def _buffer_image(self, file):
 		meta = file.meta.copy()
@@ -131,8 +131,8 @@ class Preprocessor:
 
 			if not self.keep_empty and np.all(mask_tile == 0): continue  
 
-			image_path = join_make(self.out_path, "crop", dir_name)
-			image_filename = os.path.join(image_path, f"{img_name}_{window.row_off}_{window.col_off}.{self.image_format}")
+			image_path = join_make(self.out_path, dir_name)
+			image_filename = os.path.join(image_path, f"{img_name}_{window.row_off}_{window.col_off}.{self.image_extension}")
 			
 			easy_write(image_filename, tile_meta, tile, mask_tile)
 				
@@ -163,15 +163,15 @@ class Preprocessor:
 
 
 def process(config):
-	search_folder = os.path.join(config.image_dir, "*" + config.image_format)
+	search_folder = os.path.join(config.image_dir, "*" + config.image_extension)
 	img_paths = glob.glob(search_folder)
 	print(f"Found {len(img_paths)} image(s) for preprocessing...")
 
-	processor = Preprocessor(config.buffer_size, config.step_size, config.resample_size, config.keep_empty, config.image_format)
+	processor = Preprocessor(config.buffer_size, config.step_size, config.resample_size, config.keep_empty, config.image_extension)
 	processor(img_paths, config.output_dir, "images")
 
 	if config.target_dir:	
-		target_dir = os.path.join(config.target_dir, "*" + config.image_format)
+		target_dir = os.path.join(config.target_dir, "*" + config.image_extension)
 		masks_paths = glob.glob(target_dir)
 		print(f"Found {len(masks_paths)} target(s) for preprocessing...")
 		processor(masks_paths, config.output_dir, "targets")

@@ -24,9 +24,9 @@ class AverageMerger:
 			self.count[rmin:rmax, cmin:cmax] += 1
 
 class Postprocessor:
-	def __init__(self, input_dir: str, image_format: str = ".tif"):
+	def __init__(self, input_dir: str, image_extension: str = ".tif"):
 		self.input_dir = Path(input_dir)
-		self.image_format = "." + image_format.lstrip().lower()
+		self.image_extension = "." + image_extension.lstrip().lower()
 
 	def create_alpha_sources(self, img_paths):
 		mem_files = []
@@ -64,7 +64,7 @@ class Postprocessor:
 
 
 	def __call__(self, output_path: str = "./", output_type="masks", threshold=127):
-		img_paths = glob.glob(os.path.join(self.input_dir, f"*{self.image_format}"))
+		img_paths = glob.glob(os.path.join(self.input_dir, f"*{self.image_extension}"))
 		unique_stems = set(["_".join(Path(x).name.split("_")[:-2]) for x in img_paths])
 		os.makedirs(output_path, exist_ok=True)
 
@@ -72,7 +72,7 @@ class Postprocessor:
 			profile = f.profile.copy()
 
 		for unique in tqdm(unique_stems):
-			img_paths = glob.glob(os.path.join(self.input_dir, f"{unique}*{self.image_format}"))
+			img_paths = glob.glob(os.path.join(self.input_dir, f"{unique}*{self.image_extension}"))
 			print(f"Merging {unique}...({len(img_paths)} images)")
 
 			alpha_sources, mem_files = self.create_alpha_sources(img_paths)
@@ -104,7 +104,7 @@ class Postprocessor:
 					"dtype": rio.uint8
 				})
 
-			out_filename = os.path.join(output_path, f"{unique}{self.image_format}")
+			out_filename = os.path.join(output_path, f"{unique}{self.image_extension}")
 			memfile = rio.MemoryFile()
 			dst = memfile.open(**profile)
 			avg = np.nan_to_num(avg, nan=0, posinf=255, neginf=0)
@@ -127,7 +127,7 @@ class Postprocessor:
 			memfile.close()
 
 def postprocess(config):
-	postprocessor = Postprocessor(config.image_dir, config.image_format)
+	postprocessor = Postprocessor(config.image_dir, config.image_extension)
 	postprocessor(config.output_dir, config.output_type, config.threshold)
 
 
