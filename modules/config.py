@@ -3,7 +3,6 @@ from enum import Enum
 from typing import Optional, Literal, Union, Annotated
 import yaml
 from pathlib import Path
-import os
 
 
 class OutputType(str, Enum):
