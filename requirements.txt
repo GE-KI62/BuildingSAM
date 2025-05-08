@@ -1,18 +1,12 @@
 albumentations
-monai
 numpy
 Pillow
-psutil
 pycocotools
 PyYAML
 rasterio
 safetensors
-scikit_learn
-tensorboard
 --extra-index-url https://download.pytorch.org/whl/cu118
 torch
 torchvision
-torchaudio
-torchmetrics
 tqdm
 typer
